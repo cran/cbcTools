@@ -1,6 +1,6 @@
 Package: cbcTools
 Title: Design and Evaluate Choice-Based Conjoint Survey Experiments
-Version: 0.2.0
+Version: 0.3.0
 Maintainer: John Helveston <john.helveston@gmail.com>
 Authors@R: c(
     person(given   = "John",
@@ -19,8 +19,8 @@ Imports: fastDummies, ggplot2, idefix, logitr (>= 1.0.1), MASS,
 URL: https://github.com/jhelvy/cbcTools
 BugReports: https://github.com/jhelvy/cbcTools/issues
 NeedsCompilation: no
-Packaged: 2023-02-27 11:12:00 UTC; jhelvy
+Packaged: 2023-05-09 12:14:54 UTC; jhelvy
 Author: John Helveston [cre, aut, cph]
     (<https://orcid.org/0000-0002-2657-9191>)
 Repository: CRAN
-Date/Publication: 2023-02-28 14:32:34 UTC
+Date/Publication: 2023-05-09 22:50:02 UTC
