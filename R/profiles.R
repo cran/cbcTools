@@ -2,91 +2,77 @@
 #'
 #' This function creates a data frame of of all possible combinations of
 #' attribute levels.
-#' @param ... A series of vectors defining the levels of each attribute. Each
-#' argument should be named according to the attribute name, e.g.,
-#' `price = c(1, 2, 3)`. Conditional attribute levels can also be included by
-#' setting each level of an attribute to a named list that determines the
-#' levels of other attributes for that specific level.
+#' @param ... Any number of named vectors defining each attribute and their levels,
+#' e.g. `price = c(1, 2, 3)`. Separate each vector by a comma.
 #' @return A data frame of all possible combinations of attribute levels.
 #' @export
 #' @examples
 #' library(cbcTools)
 #'
-#' # A simple conjoint experiment about apples
+#' # Generate all profiles for a simple conjoint experiment about apples
+#' profiles <- cbc_profiles(
+#'   price     = c(1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5),
+#'   type      = c("Fuji", "Gala", "Honeycrisp"),
+#'   freshness = c('Poor', 'Average', 'Excellent')
+#' )
+cbc_profiles <- function(...) {
+  levels <- list(...)
+  check_inputs_profiles(levels)
+  profiles <- expand.grid(levels)
+  profiles <- add_profile_ids(profiles)
+  return(profiles)
+}
+
+#' Obtain a restricted set of profiles
 #'
-#' # Generate all possible profiles
+#' This function returns a restricted set of profiles as a data frame.
+#' @param profiles A data frame in which each row is a possible profile.
+#' This can be generated using the `cbc_profiles()` function.
+#' @param ... Any number of restricted pairs of attribute levels, defined as
+#' pairs of logical expressions separated by commas. For example, the
+#' restriction `type == 'Fuji' & freshness == 'Poor'` will eliminate profiles
+#' such that `"Fuji"` type apples will never be shown with `"Poor"` freshness.
+#' @return A restricted set of profiles as a data frame.
+#' @export
+#' @examples
+#' library(cbcTools)
+#'
+#' # Generate all profiles for a simple conjoint experiment about apples
 #' profiles <- cbc_profiles(
 #'   price     = c(1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5),
 #'   type      = c("Fuji", "Gala", "Honeycrisp"),
 #'   freshness = c('Poor', 'Average', 'Excellent')
 #' )
 #'
-#' # Generate profiles for with conditional levels
-#' profiles <- cbc_profiles(
-#'   price = c(1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5),
-#'   freshness = c("Excellent", "Average", "Poor"),
-#'   type = list(
-#'     "Fuji" = list(
-#'         price = c(2, 2.5, 3)
-#'     ),
-#'     "Gala" = list(
-#'         price = c(1, 1.5, 2)
-#'     ),
-#'     "Honeycrisp" = list(
-#'         price = c(2.5, 3, 3.5, 4, 4.5, 5),
-#'         freshness = c("Excellent", "Average")
-#'     )
-#'   )
-#' )
+#' # Obtain a restricted subset of profiles based on pairs of logical
+#' # expressions. The example below contains the following restrictions:
 #'
-cbc_profiles <- function(...) {
-  levels <- list(...)
-  # Check for conditional levels
-  cond <- lapply(levels, function(x) names(x))
-  cond_check <- unlist(lapply(cond, function(x) is.null(x)))
-  if (! all(cond_check)) {
-    return(cbc_profiles_conditional(levels, cond_check))
-  }
-  # No conditional levels, so return full set of combinations
-  profiles <- expand.grid(levels)
-  profiles <- add_profile_ids(profiles)
-  return(profiles)
-}
-
-cbc_profiles_conditional <- function(levels, cond_check) {
-  # Make all possible profiles
-  new_levels <- levels
-  cond_indices <- which(cond_check == FALSE)
-  for (i in seq_len(length(cond_indices))) {
-    att <- levels[[cond_indices[i]]]
-    new_levels[[cond_indices[i]]] <- names(att)
-  }
-  profiles <- expand.grid(new_levels)
-  # Now filter out profiles based on conditionals
-  for (i in seq_len(length(cond_indices))) {
-    att_name <- names(cond_indices[i])
-    att <- levels[[cond_indices[i]]]
-    for (j in seq_len(length(att))) {
-      att_level <- names(att)[[j]]
-      conditions <- att[[j]]
-      for (k in seq_len(length(conditions))) {
-        cond_att <- names(conditions)[k]
-        cond_levels <- conditions[[k]]
-        indices_att <- which(profiles[[att_name]] == att_level)
-        indices_cond <- which(profiles[[cond_att]] %in% cond_levels)
-        indices_drop <- setdiff(indices_att, indices_cond)
-        profiles <- profiles[-indices_drop,]
-      }
-    }
-  }
-  row.names(profiles) <- NULL
-  profiles <- add_profile_ids(profiles)
-  return(profiles)
+#' # - `"Gala"` apples will not be shown with the prices `1.5`, `2.5`, & `3.5`.
+#' # - `"Honeycrisp"` apples will not be shown with prices less than `2`.
+#' # - `"Honeycrisp"` apples will not be shown with the `"Poor"` freshness.
+#' # - `"Fuji"` apples will not be shown with the `"Excellent"` freshness.
+#'
+#' profiles_restricted <- cbc_restrict(
+#'     profiles,
+#'     type == "Gala" & price %in% c(1.5, 2.5, 3.5),
+#'     type == "Honeycrisp" & price > 2,
+#'     type == "Honeycrisp" & freshness == "Poor",
+#'     type == "Fuji" & freshness == "Excellent"
+#' )
+cbc_restrict <- function(profiles, ...) {
+    check_inputs_restrict(profiles)
+    drop_ids <- unique(unlist(lapply(
+        rlang::enquos(...),
+        function(x) dplyr::filter(profiles, !!x) |> dplyr::pull(.data$profileID)
+    )))
+    profiles <- profiles[-drop_ids,]
+    profiles <- add_profile_ids(profiles)
+    return(profiles)
 }
 
 add_profile_ids <- function(profiles) {
   profiles$profileID <- seq(nrow(profiles))
-  varNames <- varNames <- setdiff(names(profiles), "profileID")
-  profiles <- profiles[, c("profileID", varNames)]
+  profiles <- profiles[, c("profileID", setdiff(names(profiles), "profileID"))]
+  row.names(profiles) <- NULL
   return(profiles)
 }
