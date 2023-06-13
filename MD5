@@ -1,10 +1,10 @@
-27894a09f700de7ca5c571620f840c12 *DESCRIPTION
+9ffc1ad8d4448f52e7f006f69a2b38d0 *DESCRIPTION
 d7948e57f8b934bc716171ad2cb2afb6 *LICENSE
 1f2aa292a39fc920104547eb1ffd0e53 *NAMESPACE
-f2a1a03d7d1081c949066db681698a58 *NEWS.md
+e8ce43d2ac25eb46e9d56a36a9e2d950 *NEWS.md
 007cd9a3c01b3e87887c932345931a98 *R/choices.R
-fa7d286f3296cdcaad5213c5e3cb3e67 *R/design.R
-a301dbf18bf1806bcd038cd2b4da5a44 *R/input_checks.R
+3fea3a39a6ebd3c71c583b6ce1c8f393 *R/design.R
+2a912331d3b17078158fcdbc870e90a6 *R/input_checks.R
 b4363bf6d0ed021e56fc42913ff743c0 *R/inspect.R
 b3dc13d7dc8ead0d486ba4fb1d36c467 *R/methods.R
 af4528ec3ee41470380fe165c9e9c151 *R/power.R
@@ -12,10 +12,10 @@ af4528ec3ee41470380fe165c9e9c151 *R/power.R
 c836afb8fd7becc4b8095e0c252c26ce *R/tools.R
 0093f4801b7a46040041aec7afe5369b *README.md
 ea124a494ad7922985532ad3b308e4d5 *build/partial.rdb
-06fee04343706d72a2f1c50f10161c8d *inst/CITATION
+ab2c823828cf512e308836ca6e358057 *inst/CITATION
 8e2a5b2beef6cbe082fc8e0f0a07c515 *man/cbc_balance.Rd
 caddd698d31e92566282b444b0001fc8 *man/cbc_choices.Rd
-6d4a2076c2a77edd0fcb2fac3708b926 *man/cbc_design.Rd
+3d31d414588f8da0404b41942b26f9ac *man/cbc_design.Rd
 7127b3e6f184100dd2c9e2c209b55cf4 *man/cbc_overlap.Rd
 3a438e7d6e4fe0f2dfaa3fe2d76403c3 *man/cbc_power.Rd
 0a36614258b1eafed023b4d287dab953 *man/cbc_profiles.Rd

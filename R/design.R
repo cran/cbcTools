@@ -39,8 +39,12 @@
 #' choice set given the sample from the prior preference distribution.
 #' Defaults to `FALSE`.
 #' @param method Which method to use for obtaining a Bayesian D-efficient
-#' design, `"CEA"` or `"Modfed"`? Defaults to `"CEA"`. See `?idefix::CEA`
-#' and `?idefix::Modfed` for more details.
+#' design, `"CEA"` or `"Modfed"`? If `priors` are specified, it defaults to
+#' `"CEA"`, otherwise it defaults to `NULL`. See `?idefix::CEA` and
+#' `?idefix::Modfed` for more details.
+#' @param keep_db_error If `TRUE`, for Bayesian D-efficient designs the returned
+#' object will be a list containing the design and the DB-error score.
+#' Defaults to `FALSE`.
 #' @param max_iter A numeric value indicating the maximum number allowed
 #' iterations when searching for a Bayesian D-efficient design. The default is
 #' 50.
@@ -101,6 +105,7 @@
 #'         type      = c(0.1, 0.2),
 #'         freshness = c(0.1, 0.2)
 #'     ),
+#'     method = "CEA",
 #'     parallel = FALSE
 #' )
 cbc_design <- function(
@@ -116,10 +121,18 @@ cbc_design <- function(
   priors = NULL,
   prior_no_choice = NULL,
   probs = FALSE,
-  method = "CEA",
+  method = NULL,
+  keep_db_error = FALSE,
   max_iter = 50,
   parallel = TRUE
 ) {
+  if (!is.null(priors)) {
+    if (is.null(method)) {
+        # Set default method to 'CEA' if priors are specified and
+        # user didn't specify a method.
+        method <- 'CEA'
+    }
+  }
   check_inputs_design(
     profiles,
     n_resp,
@@ -134,6 +147,7 @@ cbc_design <- function(
     prior_no_choice,
     probs,
     method,
+    keep_db_error,
     max_iter,
     parallel
   )
@@ -149,7 +163,8 @@ cbc_design <- function(
   } else {
     design <- make_design_deff(
       profiles, n_resp, n_alts, n_q, n_blocks, n_draws, no_choice, n_start,
-      label, priors, prior_no_choice, probs, method, max_iter, parallel
+      label, priors, prior_no_choice, probs, method, keep_db_error, max_iter,
+      parallel
     )
   }
   # Reset row numbers
@@ -343,7 +358,8 @@ reorder_cols <- function(design) {
 
 make_design_deff <- function(
     profiles, n_resp, n_alts, n_q, n_blocks, n_draws, no_choice, n_start,
-    label, priors, prior_no_choice, probs, method, max_iter, parallel
+    label, priors, prior_no_choice, probs, method, keep_db_error, max_iter,
+    parallel
 ) {
     # Set up initial parameters for creating design
 
@@ -401,10 +417,10 @@ make_design_deff <- function(
 
     if (profiles_restricted & (method == "CEA")) {
       # "CEA" method only works with unrestricted profile set
-      method == "Modfed"
+      method <- "Modfed"
       warning(
         'The "CEA" algorithm requires the use of an unrestricted set of ',
-        'profiles, so "Modfed" is now being used instead.'
+        'profiles, so "Modfed" is being used instead.'
       )
     }
 
@@ -424,8 +440,7 @@ make_design_deff <- function(
     } else {
         D <- idefix::Modfed(
             cand.set = defineCandidateSet(
-              lvls, coding, c.lvls, profiles, ids$continuous,
-              profiles_restricted
+              lvls, coding, c.lvls, profile_lvls, ids, profiles_restricted
             ),
             par.draws = par_draws,
             n.alts = n_alts,
@@ -480,27 +495,45 @@ make_design_deff <- function(
         round(D$error, 5)
     )
 
+    # Return list containing the design and DB error if keep_db_error = TRUE
+    if (keep_db_error) {
+        return(list(design = design, db_err = D$error))
+    }
+
     return(design)
 }
 
 defineCandidateSet <- function(
-    lvls, coding, c.lvls, profiles, id_continuous, profiles_restricted
+    lvls, coding, c.lvls, profile_lvls, ids, profiles_restricted
 ) {
+  # Make candidate set with profiles, assuming non-restricted
   cand_set <- idefix::Profiles(
     lvls = lvls,
     coding = coding,
     c.lvls = c.lvls
   )
   if (!profiles_restricted) { return(cand_set) }
-  # Manually dummy-code profiles with restrictions
-  cand_set_res <- profiles[-1]
+
+  # If restricted, need to manually dummy-code profiles to avoid
+  # including restricted profiles
   cand_set_res <- fastDummies::dummy_cols(
-    cand_set_res,
-    select_columns = names(cand_set_res)[!id_continuous],
-    remove_first_dummy = TRUE
+    profile_lvls,
+    select_columns = names(profile_lvls)[ids$discrete],
+    remove_first_dummy = TRUE,
+    remove_selected_columns = TRUE
   )
-  cols_keep <- c(which(id_continuous), ncol(profiles):ncol(cand_set_res))
-  cand_set_res <- cand_set_res[,cols_keep]
+  name_order <- names(profile_lvls)
+  names_coded <- names(cand_set_res)
+  cols <- c()
+  for (i in seq_len(length(coding))) {
+    if (coding[i] == "C") {
+      name_match <- name_order[i]
+    } else {
+      name_match <- names_coded[grepl(paste0(name_order[i], "_"), names_coded)]
+    }
+    cols <- c(cols, name_match)
+  }
+  cand_set_res <- cand_set_res[,cols]
   names(cand_set_res) <- colnames(cand_set)
   cand_set_res <- as.matrix(cand_set_res)
   row.names(cand_set_res) <- seq(nrow(cand_set_res))
