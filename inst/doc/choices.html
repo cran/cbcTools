@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Simulating Choices</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Simulating Choices</h1>
+
+
+
+<p>Choice simulation converts experimental designs into realistic choice
+data by predicting how respondents would answer choice questions. This
+is essential for testing designs, conducting power analyses, and
+validating experimental assumptions before data collection. This article
+shows how to use <code>cbc_choices()</code> to simulate choice
+patterns.</p>
+<p>Before starting, let’s define some basic profiles and a basic random
+design to work with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(cbcTools)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>profiles <span class="ot">&lt;-</span> <span class="fu">cbc_profiles</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">2</span>, <span class="fl">2.5</span>, <span class="dv">3</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&#39;Fuji&#39;</span>, <span class="st">&#39;Gala&#39;</span>, <span class="st">&#39;Honeycrisp&#39;</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="st">&#39;Poor&#39;</span>, <span class="st">&#39;Average&#39;</span>, <span class="st">&#39;Excellent&#39;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;random&quot;</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>)</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>design</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; Design method: random</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; Structure: 100 respondents × 6 questions × 2 alternatives</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt; Profile usage: 45/45 (100.0%)</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_inspect() for a more detailed summary</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; First few rows of design:</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="co">#&gt; 1                0                  1</span></span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="co">#&gt; 2                0                  0</span></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="co">#&gt; 3                0                  0</span></span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a><span class="co">#&gt; 4                0                  0</span></span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a><span class="co">#&gt; 5                0                  1</span></span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a><span class="co">#&gt; 6                0                  1</span></span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="co">#&gt; ... and 1194 more rows</span></span></code></pre></div>
+<div id="choice-simulation-approaches" class="section level1">
+<h1>Choice Simulation Approaches</h1>
+<p><code>cbc_choices()</code> supports two simulation approaches:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Random simulation</strong>: Each alternative has equal
+probability of being chosen</li>
+<li><strong>Utility-based simulation</strong>: Choice probabilities
+based on multinomial logit model with specified priors</li>
+</ol>
+<div id="random-choices" class="section level2">
+<h2>Random Choices</h2>
+<p>Without priors, choices are simulated randomly with equal
+probabilities:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Random choice simulation (default)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>choices_random <span class="ot">&lt;-</span> <span class="fu">cbc_choices</span>(design)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">head</span>(choices_random)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; CBC Choice Data</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; ===============</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; Simulation method: random</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; Priors: None (random choices)</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-07-14 10:45:28</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 33.3% (1 choices)</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 66.7% (2 choices)</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent choice</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; 1                0                  1      0</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; 2                0                  0      1</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; 3                0                  0      0</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; 4                0                  0      1</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt; 5                0                  1      1</span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt; 6                0                  1      0</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co"># Check choice distribution</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="fu">table</span>(choices_random<span class="sc">$</span>choice, choices_random<span class="sc">$</span>altID)</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt;    </span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt;       1   2</span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt;   0 294 306</span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt;   1 306 294</span></span></code></pre></div>
+<p>Random simulation is useful for:</p>
+<ul>
+<li>Quick testing of design structure</li>
+<li>Conservative power analysis (worst-case scenario)</li>
+<li>Baseline comparisons</li>
+</ul>
+</div>
+<div id="utility-based-choices" class="section level2">
+<h2>Utility-Based Choices</h2>
+<p>With priors, choices follow realistic utility-based patterns:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Create priors for utility-based simulation</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.25</span>, <span class="co"># Negative preference for higher prices</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>), <span class="co"># Gala and Honeycrisp preferred over Fuji</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">1.2</span>) <span class="co"># Average and Excellent preferred over Poor</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># Utility-based choice simulation</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>choices_utility <span class="ot">&lt;-</span> <span class="fu">cbc_choices</span>(design, <span class="at">priors =</span> priors)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">head</span>(choices_utility)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; CBC Choice Data</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; ===============</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; Simulation method: utility_based</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; Priors: Used for utility-based simulation</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-07-14 10:45:28</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 66.7% (2 choices)</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 33.3% (1 choices)</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent choice</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; 1                0                  1      1</span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; 2                0                  0      0</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; 3                0                  0      0</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; 4                0                  0      1</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; 5                0                  1      1</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; 6                0                  1      0</span></span></code></pre></div>
+</div>
+<div id="choice-data-format" class="section level2">
+<h2>Choice Data Format</h2>
+<p>The simulated choice data includes all design columns plus a
+<code>choice</code> column:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">head</span>(choices_utility)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; CBC Choice Data</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; ===============</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Simulation method: utility_based</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Priors: Used for utility-based simulation</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-07-14 10:45:28</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 66.7% (2 choices)</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 33.3% (1 choices)</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent choice</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt; 1                0                  1      1</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt; 2                0                  0      0</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt; 3                0                  0      0</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt; 4                0                  0      1</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="co">#&gt; 5                0                  1      1</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="co">#&gt; 6                0                  1      0</span></span></code></pre></div>
+</div>
+</div>
+<div id="advanced-simulation-options" class="section level1">
+<h1>Advanced Simulation Options</h1>
+<div id="designs-with-no-choice" class="section level2">
+<h2>Designs with No-Choice</h2>
+<p>For designs with no-choice options, specify no-choice priors:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Create design with no-choice option</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>design_nochoice <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">no_choice =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;random&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co"># Create priors including no-choice utility</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>priors_nochoice <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.25</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">1.0</span>),</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">1.2</span>),</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  <span class="at">no_choice =</span> <span class="sc">-</span><span class="fl">0.5</span> <span class="co"># Negative = no-choice less attractive</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co"># Simulate choices</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>choices_nochoice <span class="ot">&lt;-</span> <span class="fu">cbc_choices</span>(</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>  design_nochoice,</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>  <span class="at">priors =</span> priors_nochoice</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>)</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co"># Examine no-choice rates</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>nochoice_rate <span class="ot">&lt;-</span> <span class="fu">mean</span>(choices_nochoice<span class="sc">$</span>choice[choices_nochoice<span class="sc">$</span>no_choice <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;No-choice selection rate:&quot;</span>, <span class="fu">round</span>(nochoice_rate <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>), <span class="st">&quot;%</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; No-choice selection rate: 13.3 %</span></span></code></pre></div>
+</div>
+<div id="random-parameters-mixed-logit" class="section level2">
+<h2>Random Parameters (Mixed Logit)</h2>
+<p>Simulate heterogeneous preferences using random parameters:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Create priors with random parameters</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>priors_random <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="fu">rand_spec</span>(<span class="at">dist =</span> <span class="st">&quot;n&quot;</span>, <span class="at">mean =</span> <span class="sc">-</span><span class="fl">0.1</span>, <span class="at">sd =</span> <span class="fl">0.05</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">rand_spec</span>(<span class="at">dist =</span> <span class="st">&quot;n&quot;</span>, <span class="at">mean =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>), <span class="at">sd =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>)),</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>), <span class="co"># Keep some parameters fixed</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">n_draws =</span> <span class="dv">100</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># Simulate choices with preference heterogeneity</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>choices_mixed <span class="ot">&lt;-</span> <span class="fu">cbc_choices</span>(design, <span class="at">priors =</span> priors_random)</span></code></pre></div>
+</div>
+<div id="interaction-effects" class="section level2">
+<h2>Interaction Effects</h2>
+<p>Include interaction effects in choice simulation:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Create priors with interactions</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>priors_interactions <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.1</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;Fuji&quot;</span> <span class="ot">=</span> <span class="fl">0.5</span>, <span class="st">&quot;Gala&quot;</span> <span class="ot">=</span> <span class="dv">1</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="st">&quot;Average&quot;</span> <span class="ot">=</span> <span class="fl">0.6</span>, <span class="st">&quot;Excellent&quot;</span> <span class="ot">=</span> <span class="fl">1.2</span>),</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="at">interactions =</span> <span class="fu">list</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="co"># Price sensitivity varies by apple type</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    <span class="fu">int_spec</span>(</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>      <span class="at">between =</span> <span class="fu">c</span>(<span class="st">&quot;price&quot;</span>, <span class="st">&quot;type&quot;</span>),</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>      <span class="at">with_level =</span> <span class="st">&quot;Fuji&quot;</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>      <span class="at">value =</span> <span class="fl">0.5</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>    ),</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>    <span class="fu">int_spec</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>      <span class="at">between =</span> <span class="fu">c</span>(<span class="st">&quot;price&quot;</span>, <span class="st">&quot;type&quot;</span>),</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>      <span class="at">with_level =</span> <span class="st">&quot;Gala&quot;</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>      <span class="at">value =</span> <span class="fl">0.2</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>    )</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  )</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>)</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co"># Simulate choices with interaction effects</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>choices_interactions <span class="ot">&lt;-</span> <span class="fu">cbc_choices</span>(</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>  design,</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>  <span class="at">priors =</span> priors_interactions</span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="validating-choice-patterns" class="section level1">
+<h1>Validating Choice Patterns</h1>
+<div id="overall-choice-frequencies" class="section level2">
+<h2>Overall Choice Frequencies</h2>
+<p>Based on the priors used, we expect:</p>
+<ul>
+<li><strong>Lower prices preferred</strong> (negative price
+coefficient)</li>
+<li><strong>Honeycrisp &gt; Gala &gt; Fuji</strong> (type coefficients:
+0.2 &gt; 0.1 &gt; 0)</li>
+<li><strong>Excellent &gt; Average &gt; Poor</strong> (freshness
+coefficients: 0.2 &gt; 0.1 &gt; 0)</li>
+</ul>
+<p>Examine aggregate choice patterns to validate simulation:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Decode the choice data first to get categorical variables</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>choices_decoded <span class="ot">&lt;-</span> <span class="fu">cbc_decode</span>(choices_utility)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># Aggregate attribute choices across all respondents</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>choices <span class="ot">&lt;-</span> choices_decoded</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># Price choices</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>price_choices <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(choice <span class="sc">~</span> price, <span class="at">data =</span> choices, sum)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>price_choices<span class="sc">$</span>prop <span class="ot">&lt;-</span> price_choices<span class="sc">$</span>choice <span class="sc">/</span> <span class="fu">sum</span>(price_choices<span class="sc">$</span>choice)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="fu">print</span>(price_choices)</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt;   price choice      prop</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; 1   1.0    123 0.2050000</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; 2   1.5    119 0.1983333</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; 3   2.0    121 0.2016667</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; 4   2.5    107 0.1783333</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; 5   3.0    130 0.2166667</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co"># Type choices</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>type_choices <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(choice <span class="sc">~</span> type, <span class="at">data =</span> choices, sum)</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>type_choices<span class="sc">$</span>prop <span class="ot">&lt;-</span> type_choices<span class="sc">$</span>choice <span class="sc">/</span> <span class="fu">sum</span>(type_choices<span class="sc">$</span>choice)</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="fu">print</span>(type_choices)</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt;         type choice  prop</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; 1       Fuji    171 0.285</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; 2       Gala    213 0.355</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; 3 Honeycrisp    216 0.360</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co"># Freshness choices</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>freshness_choices <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(choice <span class="sc">~</span> freshness, <span class="at">data =</span> choices, sum)</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>freshness_choices<span class="sc">$</span>prop <span class="ot">&lt;-</span> freshness_choices<span class="sc">$</span>choice <span class="sc">/</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>  <span class="fu">sum</span>(freshness_choices<span class="sc">$</span>choice)</span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="fu">print</span>(freshness_choices)</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt;   freshness choice      prop</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt; 1      Poor    145 0.2416667</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt; 2   Average    210 0.3500000</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; 3 Excellent    245 0.4083333</span></span></code></pre></div>
+</div>
+<div id="respondent-heterogeneity" class="section level2">
+<h2>Respondent Heterogeneity</h2>
+<p>For random parameter models, examine variation across
+respondents:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Create dataset with only chosen alternatives</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>chosen_alts <span class="ot">&lt;-</span> choices_mixed[choices_mixed<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># Mean attribute levels chosen by each respondent</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>resp_means <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">cbind</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    price,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    typeGala,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    typeHoneycrisp,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    freshnessAverage,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    freshnessExcellent</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  ) <span class="sc">~</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    respID,</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="at">data =</span> chosen_alts,</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  mean</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>)</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co"># Look at variation across respondents</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Price variation across respondents:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; Price variation across respondents:</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(resp_means<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; Mean: 2.01</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;SD:&quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(resp_means<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; SD: 0.28</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Honeycrisp choice rate variation:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&gt; Honeycrisp choice rate variation:</span></span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(resp_means<span class="sc">$</span>typeHoneycrisp), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&gt; Mean: 0.32</span></span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;SD:&quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(resp_means<span class="sc">$</span>typeHoneycrisp), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a><span class="co">#&gt; SD: 0.2</span></span></code></pre></div>
+</div>
+</div>
+<div id="design-consistency" class="section level1">
+<h1>Design Consistency</h1>
+<div id="using-consistent-priors" class="section level2">
+<h2>Using Consistent Priors</h2>
+<p>For D-optimal designs created with priors, use the same priors for
+choice simulation:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Create D-optimal design with priors</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>design_optimal <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">priors =</span> priors,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;stochastic&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co"># Use SAME priors for choice simulation</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>choices_consistent <span class="ot">&lt;-</span> <span class="fu">cbc_choices</span>(</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  design_optimal,</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  <span class="at">priors =</span> priors</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="prior-consistency-warnings" class="section level2">
+<h2>Prior Consistency Warnings</h2>
+<p>cbcTools warns when different priors are used:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Create different priors</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>different_priors <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="co"># Different from design optimization</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co"># This will generate a warning about inconsistent priors</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>choices_inconsistent <span class="ot">&lt;-</span> <span class="fu">cbc_choices</span>(</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>  design_optimal,</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>  <span class="at">priors =</span> different_priors</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="best-practices" class="section level1">
+<h1>Best Practices</h1>
+<div id="prior-specification" class="section level2">
+<h2>Prior Specification</h2>
+<ul>
+<li><strong>Use realistic priors</strong>: Base on literature, pilot
+studies, or expert judgment</li>
+<li><strong>Match design priors</strong>: Use same priors for design
+optimization and choice simulation<br />
+</li>
+<li><strong>Test multiple scenarios</strong>: Simulate under optimistic
+and conservative assumptions</li>
+<li><strong>Include heterogeneity</strong>: Use random parameters when
+appropriate</li>
+</ul>
+</div>
+<div id="validation-steps" class="section level2">
+<h2>Validation Steps</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Check choice counts</strong>: Verify one choice per
+question</li>
+<li><strong>Examine patterns</strong>: Ensure choices align with prior
+expectations</li>
+<li><strong>Test extremes</strong>: Simulate with very strong/weak
+preferences</li>
+<li><strong>Compare methods</strong>: Test different simulation
+approaches</li>
+</ol>
+</div>
+</div>
+<div id="next-steps" class="section level1">
+<h1>Next Steps</h1>
+<p>After simulating choices:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Conduct power analysis</strong> using
+<code>cbc_power()</code> to determine sample size requirements</li>
+<li><strong>Compare designs</strong> by simulating choices for different
+design methods</li>
+<li><strong>Validate assumptions</strong> by checking if simulated
+patterns match expectations</li>
+<li><strong>Refine priors</strong> based on simulation results before
+data collection</li>
+</ol>
+<p>For details on power analysis, see the <a href="power.Rmd">Power
+Analysis</a> vignette.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

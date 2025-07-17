@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Generating Designs</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Generating Designs</h1>
+
+
+
+<p>Once you have a set of profiles and (optionally) priors, you can
+generate a choice-based conjoint (CBC) survey design using the
+<code>cbc_design()</code> function. This article covers all the design
+methods available, their features, and how to customize designs for
+specific research needs.</p>
+<p>Before starting, let’s define some basic profiles and priors to work
+with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(cbcTools)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>profiles <span class="ot">&lt;-</span> <span class="fu">cbc_profiles</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">2</span>, <span class="fl">2.5</span>, <span class="dv">3</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&#39;Fuji&#39;</span>, <span class="st">&#39;Gala&#39;</span>, <span class="st">&#39;Honeycrisp&#39;</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="st">&#39;Poor&#39;</span>, <span class="st">&#39;Average&#39;</span>, <span class="st">&#39;Excellent&#39;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.25</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&#39;Gala&#39;</span> <span class="ot">=</span> <span class="fl">0.5</span>, <span class="st">&#39;Honeycrisp&#39;</span> <span class="ot">=</span> <span class="fl">1.0</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="st">&#39;Average&#39;</span> <span class="ot">=</span> <span class="fl">0.6</span>, <span class="st">&#39;Excellent&#39;</span> <span class="ot">=</span> <span class="fl">1.2</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>)</span></code></pre></div>
+<div id="design-basics" class="section level1">
+<h1>Design Basics</h1>
+<p>The <code>cbc_design()</code> function generates a data frame with an
+encoded experiment design formatted as one row per alternative. Choice
+questions are defined by sets of rows with the same <code>obsID</code>.
+Let’s start with a simple example (a random design):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>, <span class="co"># Alternatives per question</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>, <span class="co"># Questions per respondent</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span> <span class="co"># Number of respondents</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>design</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Design method: random</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; Structure: 100 respondents × 6 questions × 2 alternatives</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; Profile usage: 45/45 (100.0%)</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_inspect() for a more detailed summary</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; First few rows of design:</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; 1                0                  1</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; 2                0                  0</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; 3                0                  0</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; 4                0                  0</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; 5                0                  1</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; 6                0                  1</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; ... and 1194 more rows</span></span></code></pre></div>
+<div id="understanding-the-design-structure" class="section level2">
+<h2>Understanding the Design Structure</h2>
+<p>The design data frame contains several types of columns that help
+organize the experiment:</p>
+<div id="id-columns" class="section level3">
+<h3>ID Columns</h3>
+<p>These columns identify the structure of your experiment:</p>
+<ul>
+<li><strong><code>profileID</code></strong>: Unique identifier for each
+profile (combination of attribute levels), that corresponds to the IDs
+in <code>profiles</code></li>
+<li><strong><code>respID</code></strong>: Respondent ID (1 to
+<code>n_resp</code>)</li>
+<li><strong><code>qID</code></strong>: Question number within each
+respondent (1 to <code>n_q</code>)</li>
+<li><strong><code>altID</code></strong>: Alternative number within each
+question (1 to <code>n_alts</code>)</li>
+<li><strong><code>obsID</code></strong>: Unique identifier for each
+choice question across all respondents</li>
+</ul>
+</div>
+<div id="attribute-columns" class="section level3">
+<h3>Attribute Columns</h3>
+<p>The remaining columns represent your experimental attributes. By
+default, categorical attributes are <strong>dummy-coded</strong>. In
+dummy coding, <strong>continuous attributes</strong> (like
+<code>price</code>) appear as-is, but <strong>categorical
+attributes</strong> (like <code>type</code> and <code>freshness</code>)
+are split into multiple binary columns.</p>
+<p>For example, for <code>type</code>, we have the following
+columns:</p>
+<ul>
+<li><code>typeGala</code> = 1 if type is “Gala”, 0 otherwise</li>
+<li><code>typeHoneycrisp</code> = 1 if type is “Honeycrisp”, 0
+otherwise</li>
+</ul>
+<p>Here the reference level (“Fuji”) is represented when both dummy
+variables equal 0.</p>
+</div>
+<div id="converting-to-categorical-format" class="section level3">
+<h3>Converting to Categorical Format</h3>
+<p>If you prefer to see categorical variables in their original format,
+use <code>cbc_decode()</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>design_decoded <span class="ot">&lt;-</span> <span class="fu">cbc_decode</span>(design)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>design_decoded</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; Design method: random</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; Structure: 100 respondents × 6 questions × 2 alternatives</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Profile usage: 45/45 (100.0%)</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_inspect() for a more detailed summary</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; First few rows of design:</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price       type freshness</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0       Fuji Excellent</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0 Honeycrisp      Poor</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5 Honeycrisp      Poor</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0       Fuji      Poor</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5 Honeycrisp Excellent</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0 Honeycrisp Excellent</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; ... and 1194 more rows</span></span></code></pre></div>
+<p>The decoded version shows:</p>
+<ul>
+<li><code>type</code> as a categorical variable with levels “Fuji”,
+“Gala”, “Honeycrisp”</li>
+<li><code>freshness</code> as a categorical variable with levels “Poor”,
+“Average”, “Excellent”</li>
+<li><code>price</code> remains unchanged (continuous variables don’t
+need decoding)</li>
+</ul>
+<p>Both forms of the design (dummy-coded and categorical) are convenient
+for different purposes, though they are otherwise equivalent.</p>
+</div>
+</div>
+</div>
+<div id="design-methods" class="section level1">
+<h1>Design Methods</h1>
+<p>The <code>cbc_design()</code> function supports several design
+generation methods, each with different strengths and use cases:</p>
+<div id="method-comparison-table" class="section level2">
+<h2>Method Comparison Table</h2>
+<table>
+<colgroup>
+<col width="15%" />
+<col width="7%" />
+<col width="13%" />
+<col width="12%" />
+<col width="9%" />
+<col width="15%" />
+<col width="10%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Speed</th>
+<th>Efficiency</th>
+<th>No Choice</th>
+<th>Labeled</th>
+<th>Restrictions</th>
+<th>Blocking</th>
+<th>Interactions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;random&quot;</code></td>
+<td>Fast</td>
+<td>Low</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td><code>&quot;shortcut&quot;</code></td>
+<td>Fast</td>
+<td>Medium</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;minoverlap&quot;</code></td>
+<td>Fast</td>
+<td>Medium</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr class="even">
+<td><code>&quot;balanced&quot;</code></td>
+<td>Fast</td>
+<td>Medium</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;stochastic&quot;</code></td>
+<td>Slow</td>
+<td>High</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td><code>&quot;modfed&quot;</code></td>
+<td>Slow</td>
+<td>High</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;cea&quot;</code></td>
+<td>Slow</td>
+<td>High</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<p>All design methods ensure:</p>
+<ol style="list-style-type: decimal">
+<li><strong>No duplicate profiles</strong> within any choice set</li>
+<li><strong>No duplicate choice sets</strong> within any respondent</li>
+<li><strong>Dominance removal</strong> (if enabled) eliminates choice
+sets with dominant alternatives (requires priors)</li>
+</ol>
+</div>
+<div id="random-method" class="section level2">
+<h2><code>&quot;random&quot;</code> Method</h2>
+<p>The <code>&quot;random&quot;</code> method is the default and creates designs
+by randomly sampling profiles for each respondent independently. This
+ensures maximum diversity but may be less statistically efficient.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>design_random <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;random&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># Quick inspection</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">cbc_inspect</span>(design_random, <span class="at">sections =</span> <span class="st">&quot;structure&quot;</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; DESIGN SUMMARY</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; =========================</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; STRUCTURE</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; ================</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; Method: random</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; Created: 2025-07-14 10:45:30</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; Respondents: 100</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; Questions per respondent: 6</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; Alternatives per question: 2</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; Total choice sets: 600</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; Profile usage: 45/45 (100.0%)</span></span></code></pre></div>
+<p><strong>When to use:</strong></p>
+<ul>
+<li>Large sample sizes where efficiency matters less</li>
+<li>Want maximum diversity across respondents</li>
+<li>No strong prior assumptions about parameters</li>
+<li>Uncertain whether interactions might be important</li>
+<li>Quick prototyping or testing</li>
+</ul>
+</div>
+<div id="frequency-based-methods" class="section level2">
+<h2>Frequency-Based Methods</h2>
+<p>The <code>&quot;shortcut&quot;</code>, <code>&quot;minoverlap&quot;</code>, and
+<code>&quot;balanced&quot;</code> methods use greedy algorithms to balance
+attribute level frequencies and minimize overlap. While they prioritize
+different metrics, they often can result in similar solutions. Each
+method has a different objective:</p>
+<ul>
+<li>The <code>&quot;shortcut&quot;</code> method balances attribute level
+frequencies while avoiding duplicate profiles within questions.</li>
+<li>The <code>&quot;minoverlap&quot;</code> method prioritizes minimizing
+attribute overlap within choice questions.</li>
+<li>The <code>&quot;balanced&quot;</code> method optimizes both frequency balance
+and pairwise attribute interactions.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>design_shortcut <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;shortcut&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>design_minoverlap <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;minoverlap&quot;</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>)</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>design_balanced <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;balanced&quot;</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="d-optimal-methods" class="section level2">
+<h2>D-Optimal Methods</h2>
+<p>These methods minimize D-error to create statistically efficient
+designs. They require more computation but produce higher-quality
+designs, especially with good priors. Each method has a different
+approach:</p>
+<ul>
+<li>The <code>&quot;stochastic&quot;</code> method uses random profile swapping to
+minimize the d-error, accepting the first improvement found. This is a
+faster algorithm as a compromise between speed and exhaustiveness.</li>
+<li>The <code>&quot;modfed&quot;</code> (Modified Fedorov) method exhaustively
+tests all possible profile swaps for each position. It is slower than
+other methods though more thorough.</li>
+<li>The <code>&quot;cea&quot;</code> (Coordinate Exchange Algorithm) method
+optimizes attribute-by-attribute, testing all possible levels for each
+attribute. It is faster than <code>&quot;modfed&quot;</code>, though requires all
+possible profiles and cannot accept restricted profile sets.</li>
+</ul>
+<p>Unlike the previous methods, these methods identify a single
+d-optimal design and then repeat that design across each respondent. In
+contrast, the other methods create a unique design for each
+respondent.</p>
+<p>For the examples below, we have <code>n_start = 1</code>, meaning it
+will only run one design search (which is faster), but you may want to
+run a longer search by increasing <code>n_start</code>. The best design
+across all starts is chosen.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>design_stochastic <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;stochastic&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">priors =</span> priors,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">n_start =</span> <span class="dv">1</span> <span class="co"># Number of random starting points</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>design_modfed <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="at">priors =</span> priors,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;modfed&quot;</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="at">n_start =</span> <span class="dv">1</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>design_cea <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>  <span class="at">priors =</span> priors,</span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;cea&quot;</span>,</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a>  <span class="at">n_start =</span> <span class="dv">1</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>)</span></code></pre></div>
+<p>Notice also that in the examples above we provided the
+<code>priors</code> to each design. This will optimize the design around
+these assumed priors by minimizing the <span class="math inline">\(D_p\)</span>-error. If you are uncertain what the
+true parameters are, you can omit the <code>priors</code> argument and
+the algorithms will minimize the <span class="math inline">\(D_0\)</span>-error. See the <a href="d_error.html">Computing D-error</a> page for more details on how
+these errors are computed.</p>
+</div>
+</div>
+<div id="comparing-designs" class="section level1">
+<h1>Comparing Designs</h1>
+<p>You can compare the results of different designs using the
+<code>cbc_compare()</code> function. This provides a comprehensive
+overview of differences in structure as well as common metrics such as
+D-error, overlap, and balance.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">cbc_compare</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="st">&quot;Random&quot;</span> <span class="ot">=</span> design_random,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="st">&quot;Shortcut&quot;</span> <span class="ot">=</span> design_shortcut,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="st">&quot;Min Overlap&quot;</span> <span class="ot">=</span> design_minoverlap,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="st">&quot;Balanced&quot;</span> <span class="ot">=</span> design_balanced,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="st">&quot;Stochastic&quot;</span> <span class="ot">=</span> design_stochastic,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="st">&quot;Modfed&quot;</span> <span class="ot">=</span> design_modfed,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="st">&quot;CEA&quot;</span> <span class="ot">=</span> design_cea</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; CBC Design Comparison</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; =====================</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; Designs compared: 7</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; Metrics: structure, efficiency, balance, overlap</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; Sorted by: d_error (ascending)</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; Structure</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; =====================</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt;       Design     Method respondents questions</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt;       Modfed     modfed         100         6</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt;          CEA        cea         100         6</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;   Stochastic stochastic         100         6</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt;       Random     random         100         6</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt;     Shortcut   shortcut         100         6</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt;  Min Overlap minoverlap         100         6</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt;     Balanced   balanced         100         6</span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt;  Alternatives Blocks Profile Usage</span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt;             2      1 (10/45) 22.2%</span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt;             2      1 (11/45) 24.4%</span></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt;             2      1 (12/45) 26.7%</span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt;             2      1  (45/45) 100%</span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt;             2      1  (45/45) 100%</span></span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt;             2      1  (45/45) 100%</span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt;             2      1  (45/45) 100%</span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&gt;  No Choice Labeled?</span></span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co">#&gt;         No       No</span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&gt;         No       No</span></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a><span class="co">#&gt;         No       No</span></span>
+<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a><span class="co">#&gt;         No       No</span></span>
+<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a><span class="co">#&gt;         No       No</span></span>
+<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a><span class="co">#&gt;         No       No</span></span>
+<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a><span class="co">#&gt;         No       No</span></span>
+<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a><span class="co">#&gt; Design Metrics</span></span>
+<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a><span class="co">#&gt; =====================</span></span>
+<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a><span class="co">#&gt;       Design     Method D-Error (Null) D-Error (Prior) Balance Overlap</span></span>
+<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a><span class="co">#&gt;       Modfed     modfed       0.850283        1.023292   0.744   0.267</span></span>
+<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a><span class="co">#&gt;          CEA        cea       0.858174        1.043690   0.777   0.233</span></span>
+<span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a><span class="co">#&gt;   Stochastic stochastic       1.203841        1.485359   0.686   0.300</span></span>
+<span id="cb7-49"><a href="#cb7-49" tabindex="-1"></a><span class="co">#&gt;       Random     random             NA              NA   0.739   0.477</span></span>
+<span id="cb7-50"><a href="#cb7-50" tabindex="-1"></a><span class="co">#&gt;     Shortcut   shortcut             NA              NA   0.741   0.267</span></span>
+<span id="cb7-51"><a href="#cb7-51" tabindex="-1"></a><span class="co">#&gt;  Min Overlap minoverlap             NA              NA   0.738   0.267</span></span>
+<span id="cb7-52"><a href="#cb7-52" tabindex="-1"></a><span class="co">#&gt;     Balanced   balanced             NA              NA   0.737   0.268</span></span>
+<span id="cb7-53"><a href="#cb7-53" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-54"><a href="#cb7-54" tabindex="-1"></a><span class="co">#&gt; Interpretation:</span></span>
+<span id="cb7-55"><a href="#cb7-55" tabindex="-1"></a><span class="co">#&gt; - D-Error: Lower is better (design efficiency)</span></span>
+<span id="cb7-56"><a href="#cb7-56" tabindex="-1"></a><span class="co">#&gt; - Balance: Higher is better (level distribution)</span></span>
+<span id="cb7-57"><a href="#cb7-57" tabindex="-1"></a><span class="co">#&gt; - Overlap: Lower is better (attribute variation)</span></span>
+<span id="cb7-58"><a href="#cb7-58" tabindex="-1"></a><span class="co">#&gt; - Profile Usage: Higher means more profiles used</span></span>
+<span id="cb7-59"><a href="#cb7-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-60"><a href="#cb7-60" tabindex="-1"></a><span class="co">#&gt; Best performers:</span></span>
+<span id="cb7-61"><a href="#cb7-61" tabindex="-1"></a><span class="co">#&gt; - D-Error: Modfed (1.023292)</span></span>
+<span id="cb7-62"><a href="#cb7-62" tabindex="-1"></a><span class="co">#&gt; - Balance: CEA (0.777)</span></span>
+<span id="cb7-63"><a href="#cb7-63" tabindex="-1"></a><span class="co">#&gt; - Overlap: CEA (0.233)</span></span>
+<span id="cb7-64"><a href="#cb7-64" tabindex="-1"></a><span class="co">#&gt; - Profile Usage: Random (100.0%)</span></span>
+<span id="cb7-65"><a href="#cb7-65" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-66"><a href="#cb7-66" tabindex="-1"></a><span class="co">#&gt; Use summary() for detailed information on any one design.</span></span></code></pre></div>
+</div>
+<div id="design-features" class="section level1">
+<h1>Design Features</h1>
+<div id="no-choice-option" class="section level2">
+<h2>No-Choice Option</h2>
+<p>Add a “no-choice” alternative to allow respondents to opt out by
+including the argument <code>no_choice = TRUE</code>. If you are using
+priors in your design (optional), then you must also provide a
+<code>no_choice</code> value in your priors:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># For D-optimal methods, must include no_choice in priors</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>priors_nochoice <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.1</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="at">no_choice =</span> <span class="sc">-</span><span class="fl">0.5</span> <span class="co"># Negative value makes no-choice less attractive</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>design_nochoice <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  <span class="at">no_choice =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  <span class="at">priors =</span> priors_nochoice,</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;stochastic&quot;</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>)</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="fu">head</span>(design_nochoice)</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; Design method: stochastic</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt; Structure: 100 respondents × 6 questions × 2 alternatives</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; Profile usage: 11/45 (24.4%)</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; D-error: 0.806115</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_inspect() for a more detailed summary</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; First few rows of design:</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt;   profileID blockID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; 1        22       1      1   1     1     1   1.5        1              0</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; 2        35       1      1   1     2     1   3.0        0              0</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; 3         0       1      1   1     3     1   0.0        0              0</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt; 4        19       1      1   2     1     2   2.5        0              0</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt; 5        13       1      1   2     2     2   2.0        0              1</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; 6         0       1      1   2     3     2   0.0        0              0</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent no_choice</span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt; 1                1                  0         0</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt; 2                0                  1         0</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt; 3                0                  0         1</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt; 4                1                  0         0</span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt; 5                0                  0         0</span></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="co">#&gt; 6                0                  0         1</span></span></code></pre></div>
+<blockquote>
+<p>Note: Designs with no-choice options must be dummy-coded and cannot
+be converted back to categorical format.</p>
+</blockquote>
+</div>
+<div id="labeled-designs" class="section level2">
+<h2>Labeled Designs</h2>
+<p>Create “labeled” or “alternative-specific” designs where one
+attribute serves as a label using the <code>label</code> argument:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>design_labeled <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">3</span>, <span class="co"># Will be overridden to match number of type levels</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;type&quot;</span>, <span class="co"># Use &#39;type&#39; attribute as labels</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;random&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">head</span>(design_labeled)</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; Design method: random</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; Structure: 100 respondents × 6 questions × 3 alternatives</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; Profile usage: 45/45 (100.0%)</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_inspect() for a more detailed summary</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; First few rows of design:</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt; 1        20      1   1     1     1   3.0        0              0</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; 2        21      1   1     2     1   1.0        1              0</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt; 3        14      1   1     3     1   2.5        0              1</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; 4         5      1   2     1     2   3.0        0              0</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&gt; 5        38      1   2     2     2   2.0        1              0</span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; 6        44      1   2     3     2   2.5        0              1</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent</span></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="co">#&gt; 1                1                  0</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&gt; 2                1                  0</span></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&gt; 3                0                  0</span></span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&gt; 4                0                  0</span></span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&gt; 5                0                  1</span></span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="co">#&gt; 6                0                  1</span></span></code></pre></div>
+</div>
+<div id="blocking" class="section level2">
+<h2>Blocking</h2>
+<p>For D-optimal methods, create multiple design blocks to reduce
+respondent burden:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>design_blocked <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">n_blocks =</span> <span class="dv">2</span>, <span class="co"># Create 2 different design blocks</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">priors =</span> priors,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;stochastic&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co"># Check block allocation</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">table</span>(design_blocked<span class="sc">$</span>blockID)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;   1   2 </span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 600 600</span></span></code></pre></div>
+</div>
+<div id="dominance-removal" class="section level2">
+<h2>Dominance Removal</h2>
+<p>Remove choice sets where one alternative dominates others based on
+parameter preferences. There are two forms of dominance removal:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Total dominance</strong>: Occurs when one alternative has
+such a high predicted choice probability (based on the prior
+coefficients) that it would be chosen by virtually all respondents. This
+creates choice sets with little information value since the outcome is
+predetermined. The <code>dominance_threshold</code> parameter controls
+this - alternatives with choice probabilities above this threshold
+(e.g., 0.8 = 80%) are considered dominant.</li>
+<li><strong>Partial dominance</strong>: Occurs when one alternative is
+superior to all others across every individual attribute component of
+the utility function (again, based on prior coefficients). For example,
+if Alternative A has higher partial utilities than Alternative B for
+every single attribute (price, type, freshness), then A partially
+dominates B regardless of the overall choice probability. This type of
+dominance is detected by comparing the attribute-level contributions to
+utility.</li>
+</ol>
+<p>Both forms of dominance create unrealistic choice scenarios that
+provide less information about respondent preferences, so removing them
+generally improves design quality.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>design_no_dominance <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">priors =</span> priors,</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;stochastic&quot;</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="at">remove_dominant =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="at">dominance_types =</span> <span class="fu">c</span>(<span class="st">&quot;total&quot;</span>, <span class="st">&quot;partial&quot;</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="at">dominance_threshold =</span> <span class="fl">0.8</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="interactions" class="section level2">
+<h2>Interactions</h2>
+<p>Include interaction effects in D-optimal designs by specifying them
+in your prior model. Interactions capture how the effect of one
+attribute depends on the level of another attribute. The design
+optimization then accounts for these interaction terms when minimizing
+D-error.</p>
+<p>Interactions are specified via the priors defined by
+<code>cbc_priors()</code>. For example:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Create priors with interactions</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>priors_interactions <span class="ot">&lt;-</span> <span class="fu">cbc_priors</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.25</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;Fuji&quot;</span> <span class="ot">=</span> <span class="fl">0.5</span>, <span class="st">&quot;Gala&quot;</span> <span class="ot">=</span> <span class="fl">1.0</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="at">freshness =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">1.2</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="at">interactions =</span> <span class="fu">list</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>    <span class="co"># Price is less negative (less price sensitive) for Fuji apples</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    <span class="fu">int_spec</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>      <span class="at">between =</span> <span class="fu">c</span>(<span class="st">&quot;price&quot;</span>, <span class="st">&quot;type&quot;</span>),</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>      <span class="at">with_level =</span> <span class="st">&quot;Fuji&quot;</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>      <span class="at">value =</span> <span class="fl">0.5</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>    ),</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>    <span class="co"># Price is slightly less negative for Gala apples</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>    <span class="fu">int_spec</span>(</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>      <span class="at">between =</span> <span class="fu">c</span>(<span class="st">&quot;price&quot;</span>, <span class="st">&quot;type&quot;</span>),</span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>      <span class="at">with_level =</span> <span class="st">&quot;Gala&quot;</span>,</span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>      <span class="at">value =</span> <span class="fl">0.2</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>    )</span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>    <span class="co"># Honeycrisp uses reference level (no additional interaction term)</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>  )</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a>)</span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>design_interactions <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">6</span>,</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">100</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a>  <span class="at">priors =</span> priors_interactions,</span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;stochastic&quot;</span></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a>)</span></code></pre></div>
+<p>When you include interactions in the prior model, the design
+optimization:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Accounts for interaction parameters</strong> when computing
+choice probabilities</li>
+<li><strong>Optimizes profile combinations</strong> that provide
+information about both main effects AND interactions</li>
+<li><strong>Creates choice sets</strong> that help distinguish between
+different interaction effects</li>
+</ol>
+<p>This leads to more efficient designs when interaction effects truly
+exist in your population, but can reduce efficiency for estimating main
+effects if interactions are misspecified or don’t actually exist.</p>
+<p>See the <a href="priors.html">Specifying Priors</a> article for more
+details and options on defining priors with interactions.</p>
+</div>
+</div>
+<div id="comprehensive-design-inspection" class="section level1">
+<h1>Comprehensive Design Inspection</h1>
+<p>Use <code>cbc_inspect()</code> for detailed design analysis:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Detailed inspection of the stochastic design</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">cbc_inspect</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  design_stochastic,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;all&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; DESIGN SUMMARY</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; =========================</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; STRUCTURE</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; ================</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; Method: stochastic</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; Created: 2025-07-14 10:45:32</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; Respondents: 100</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; Questions per respondent: 6</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; Alternatives per question: 2</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; Total choice sets: 600</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; Profile usage: 12/45 (26.7%)</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; SUMMARY METRICS</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; =================</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; D-error (with priors): 1.485359</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; D-error (null model): 1.203841</span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; (Lower values indicate more efficient designs)</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; Overall balance score: 0.686 (higher is better)</span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; Overall overlap score: 0.300 (lower is better)</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; VARIABLE ENCODING</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; =================</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; Format: Dummy-coded (type, freshness)</span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_decode_design() to convert to categorical format</span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt; ATTRIBUTE BALANCE</span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt; =================</span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; Overall balance score: 0.686 (higher is better)</span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&gt; Individual attribute level counts:</span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&gt; price:</span></span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&gt;   1 1.5   2 2.5   3 </span></span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&gt; 300 200 200 400 100 </span></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&gt;   Balance score: 0.678 (higher is better)</span></span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&gt; typeGala:</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt;   0   1 </span></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; 800 400 </span></span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt;   Balance score: 0.680 (higher is better)</span></span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&gt; typeHoneycrisp:</span></span>
+<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a><span class="co">#&gt;   0   1 </span></span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&gt; 900 300 </span></span>
+<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a><span class="co">#&gt;   Balance score: 0.586 (higher is better)</span></span>
+<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a><span class="co">#&gt; freshnessAverage:</span></span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&gt;   0   1 </span></span>
+<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a><span class="co">#&gt; 700 500 </span></span>
+<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a><span class="co">#&gt;   Balance score: 0.809 (higher is better)</span></span>
+<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a><span class="co">#&gt; freshnessExcellent:</span></span>
+<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a><span class="co">#&gt;   0   1 </span></span>
+<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a><span class="co">#&gt; 800 400 </span></span>
+<span id="cb13-67"><a href="#cb13-67" tabindex="-1"></a><span class="co">#&gt;   Balance score: 0.680 (higher is better)</span></span>
+<span id="cb13-68"><a href="#cb13-68" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-69"><a href="#cb13-69" tabindex="-1"></a><span class="co">#&gt; ATTRIBUTE OVERLAP</span></span>
+<span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a><span class="co">#&gt; =================</span></span>
+<span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a><span class="co">#&gt; Overall overlap score: 0.300 (lower is better)</span></span>
+<span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a><span class="co">#&gt; Counts of attribute overlap:</span></span>
+<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a><span class="co">#&gt; (# of questions with N unique levels)</span></span>
+<span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a><span class="co">#&gt; price: Continuous variable</span></span>
+<span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a><span class="co">#&gt;   Questions by # unique levels:</span></span>
+<span id="cb13-78"><a href="#cb13-78" tabindex="-1"></a><span class="co">#&gt;   1 (complete overlap):  16.7%  (100 / 600 questions)</span></span>
+<span id="cb13-79"><a href="#cb13-79" tabindex="-1"></a><span class="co">#&gt;   2 (partial overlap):   83.3%  (500 / 600 questions)</span></span>
+<span id="cb13-80"><a href="#cb13-80" tabindex="-1"></a><span class="co">#&gt;   3 (partial overlap):    0.0%  (0 / 600 questions)</span></span>
+<span id="cb13-81"><a href="#cb13-81" tabindex="-1"></a><span class="co">#&gt;   4 (partial overlap):    0.0%  (0 / 600 questions)</span></span>
+<span id="cb13-82"><a href="#cb13-82" tabindex="-1"></a><span class="co">#&gt;   5 (no overlap):         0.0%  (0 / 600 questions)</span></span>
+<span id="cb13-83"><a href="#cb13-83" tabindex="-1"></a><span class="co">#&gt;   Average unique levels per question: 1.83</span></span>
+<span id="cb13-84"><a href="#cb13-84" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-85"><a href="#cb13-85" tabindex="-1"></a><span class="co">#&gt; typeGala: Continuous variable</span></span>
+<span id="cb13-86"><a href="#cb13-86" tabindex="-1"></a><span class="co">#&gt;   Questions by # unique levels:</span></span>
+<span id="cb13-87"><a href="#cb13-87" tabindex="-1"></a><span class="co">#&gt;   1 (complete overlap):  33.3%  (200 / 600 questions)</span></span>
+<span id="cb13-88"><a href="#cb13-88" tabindex="-1"></a><span class="co">#&gt;   2 (no overlap):        66.7%  (400 / 600 questions)</span></span>
+<span id="cb13-89"><a href="#cb13-89" tabindex="-1"></a><span class="co">#&gt;   Average unique levels per question: 1.67</span></span>
+<span id="cb13-90"><a href="#cb13-90" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-91"><a href="#cb13-91" tabindex="-1"></a><span class="co">#&gt; typeHoneycrisp: Continuous variable</span></span>
+<span id="cb13-92"><a href="#cb13-92" tabindex="-1"></a><span class="co">#&gt;   Questions by # unique levels:</span></span>
+<span id="cb13-93"><a href="#cb13-93" tabindex="-1"></a><span class="co">#&gt;   1 (complete overlap):  50.0%  (300 / 600 questions)</span></span>
+<span id="cb13-94"><a href="#cb13-94" tabindex="-1"></a><span class="co">#&gt;   2 (no overlap):        50.0%  (300 / 600 questions)</span></span>
+<span id="cb13-95"><a href="#cb13-95" tabindex="-1"></a><span class="co">#&gt;   Average unique levels per question: 1.50</span></span>
+<span id="cb13-96"><a href="#cb13-96" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-97"><a href="#cb13-97" tabindex="-1"></a><span class="co">#&gt; freshnessAverage: Continuous variable</span></span>
+<span id="cb13-98"><a href="#cb13-98" tabindex="-1"></a><span class="co">#&gt;   Questions by # unique levels:</span></span>
+<span id="cb13-99"><a href="#cb13-99" tabindex="-1"></a><span class="co">#&gt;   1 (complete overlap):  16.7%  (100 / 600 questions)</span></span>
+<span id="cb13-100"><a href="#cb13-100" tabindex="-1"></a><span class="co">#&gt;   2 (no overlap):        83.3%  (500 / 600 questions)</span></span>
+<span id="cb13-101"><a href="#cb13-101" tabindex="-1"></a><span class="co">#&gt;   Average unique levels per question: 1.83</span></span>
+<span id="cb13-102"><a href="#cb13-102" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-103"><a href="#cb13-103" tabindex="-1"></a><span class="co">#&gt; freshnessExcellent: Continuous variable</span></span>
+<span id="cb13-104"><a href="#cb13-104" tabindex="-1"></a><span class="co">#&gt;   Questions by # unique levels:</span></span>
+<span id="cb13-105"><a href="#cb13-105" tabindex="-1"></a><span class="co">#&gt;   1 (complete overlap):  33.3%  (200 / 600 questions)</span></span>
+<span id="cb13-106"><a href="#cb13-106" tabindex="-1"></a><span class="co">#&gt;   2 (no overlap):        66.7%  (400 / 600 questions)</span></span>
+<span id="cb13-107"><a href="#cb13-107" tabindex="-1"></a><span class="co">#&gt;   Average unique levels per question: 1.67</span></span></code></pre></div>
+<div id="customizing-optimization" class="section level2">
+<h2>Customizing Optimization</h2>
+<p>The <code>cbc_design()</code> function offers many customization
+options:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Advanced stochastic design with custom settings</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>design_advanced <span class="ot">&lt;-</span> <span class="fu">cbc_design</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="at">profiles =</span> profiles,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="at">n_alts =</span> <span class="dv">2</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="at">n_q =</span> <span class="dv">8</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="at">n_resp =</span> <span class="dv">300</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="at">n_blocks =</span> <span class="dv">2</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="at">priors =</span> priors,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;stochastic&quot;</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="at">n_start =</span> <span class="dv">10</span>, <span class="co"># More starting points for better optimization</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>  <span class="at">max_iter =</span> <span class="dv">100</span>, <span class="co"># More iterations per start</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>  <span class="at">n_cores =</span> <span class="dv">4</span>, <span class="co"># Parallel processing</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>  <span class="at">remove_dominant =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>  <span class="at">dominance_threshold =</span> <span class="fl">0.9</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>  <span class="at">randomize_questions =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>  <span class="at">randomize_alts =</span> <span class="cn">TRUE</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="next-steps" class="section level1">
+<h1>Next Steps</h1>
+<p>After generating your design:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Inspect the design</strong> using <code>cbc_inspect()</code>
+to understand its properties</li>
+<li><strong>Simulate choices</strong> using <code>cbc_choices()</code>
+to test the design</li>
+<li><strong>Conduct power analysis</strong> using
+<code>cbc_power()</code> to determine sample size requirements</li>
+<li><strong>Compare alternatives</strong> using
+<code>cbc_compare()</code> to choose the best design</li>
+</ol>
+<p>For more details on these next steps, see:</p>
+<ul>
+<li>The <a href="choices.html">Simulating Choices</a> vignette</li>
+<li>The <a href="power.html">Power Analysis</a> vignette</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

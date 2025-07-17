@@ -1,5 +1,32 @@
 # cbcTools (development version)
 
+# cbcTools 0.6.1
+
+- Added `include_probs` argument to `cbc_design()`, which includes predicted choice probabilities in the returned design data frame if `include_probs = TRUE`. Defaults to `FALSE`.
+
+# cbcTools 0.6.0
+
+- Major overhaul of the package with breaking changes.
+- New function, `cbc_priors()``. This allows users to specify a set of priors according to a wide variety of model specifications, including random parameters (with or without correlated heterogeneity), interactions, and "no choice" options. These priors can then be used to create designs and simulate choices.
+- Coefficients for levels of an attribute in `cbc_priors()` can be named vectors, addressing #24.
+- Major overhaul of the `cbc_design()` function, with entirely new algorithms for searching for designs
+  - One is "random", three are frequency-based ("greedy") algorithms, and three more are d-error minimizing algorithms.
+  - Old methods removed: `"full"`, `"orthogonal"`, `"dopt"`, `"CEA"`, and `"Modfed"`
+  - Bayesian D-efficient designs are now created based on the priors provided. With random parameters in the priors, a Bayesian D-efficient design will be created.
+  - New support for removing dominant alternatives from designs.
+  - New support for randomizing the order of questions and alternatives across respondents, addresses #29.
+  - New `cbc_inspect()` function for comprehensively inspecting designs.
+  - New `cbc_compare()` function for comparing designs.
+  - New functionality in `cbc_power()` for computing visualizing power analyses.
+
+# cbcTools 0.5.2
+
+- Bug fix in checking input settings (#34)
+
+# cbcTools 0.5.1
+
+- Patch to fix a joining issue in the `join_profiles()` function (#27)
+
 # cbcTools 0.5.0
 
 - Further revisions to the `method` argument in the `cbc_design()` function.
