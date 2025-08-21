@@ -155,12 +155,12 @@ head(design_labeled)
 ## -----------------------------------------------------------------------------
 design_blocked <- cbc_design(
   profiles = profiles,
+  method = "stochastic",
+  priors = priors,
   n_alts = 2,
   n_q = 6,
   n_resp = 100,
-  n_blocks = 2, # Create 2 different design blocks
-  priors = priors,
-  method = "stochastic"
+  n_blocks = 2 # Create 2 different design blocks
 )
 
 # Check block allocation
