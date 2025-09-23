@@ -153,6 +153,68 @@ design_labeled <- cbc_design(
 head(design_labeled)
 
 ## -----------------------------------------------------------------------------
+# Create profiles with attribute-specific feature
+profiles_vehicles <- cbc_profiles(
+  price = c(15, 20, 25), # Price in $1,000s
+  fuelEconomy = c(20, 25, 30), # Fuel economy (mpg)
+  powertrain = c('gas', 'hybrid', 'electric'),
+  range_electric = c(0, 100, 150, 200, 250) # EV driving range (miles)
+) |> 
+  # Restrict non-electric powertrains from having range_electric other than 0
+  cbc_restrict(
+    (powertrain == 'electric') & (range_electric == 0),
+    (powertrain != 'electric') & (range_electric != 0)
+  )
+
+# Check the balance problem - electric vehicles are over-represented
+table(profiles_vehicles$powertrain)
+
+## -----------------------------------------------------------------------------
+# Design without balance_by - electric powertrains over-represented
+design_unbalanced <- cbc_design(
+  profiles = profiles_vehicles,
+  n_alts = 3,
+  n_q = 8,
+  n_resp = 100,
+  method = "random"
+) |>
+    cbc_decode() # Converts dummy-coded powertrain attributes back to "powertrain"
+
+# Check powertrain distribution - again, electric is over-represented
+table(design_unbalanced$powertrain)
+
+## -----------------------------------------------------------------------------
+# Design with balance_by - balanced powertrain representation
+design_balanced <- cbc_design(
+  profiles = profiles_vehicles,
+  n_alts = 3,
+  n_q = 8,
+  n_resp = 100,
+  method = "random",
+  balance_by = "powertrain" # Balance across powertrain levels
+) |> 
+    cbc_decode()
+
+# Check improved powertrain distribution - now powertrain is balanced
+table(design_balanced$powertrain)
+
+## -----------------------------------------------------------------------------
+# Balance across combinations of powertrain and price
+design_multi_balance <- cbc_design(
+  profiles = profiles_vehicles,
+  n_alts = 3,
+  n_q = 8,
+  n_resp = 50,
+  method = "random",
+  balance_by = c("powertrain", "price")
+) |> 
+    cbc_decode()
+
+# Check improved powertrain distribution - now powertrain and price are balanced
+table(design_multi_balance$powertrain)
+table(design_multi_balance$price)
+
+## -----------------------------------------------------------------------------
 design_blocked <- cbc_design(
   profiles = profiles,
   method = "stochastic",
