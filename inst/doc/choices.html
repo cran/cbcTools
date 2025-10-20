@@ -367,27 +367,21 @@ design to work with:</p>
 <span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>design</span>
 <span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; Design method: random</span></span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; Structure: 100 respondents × 6 questions × 2 alternatives</span></span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt; Profile usage: 45/45 (100.0%)</span></span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_inspect() for a more detailed summary</span></span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; First few rows of design:</span></span>
-<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
-<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
-<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
-<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
-<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
-<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
-<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
-<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent</span></span>
-<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="co">#&gt; 1                0                  1</span></span>
-<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="co">#&gt; 2                0                  0</span></span>
-<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="co">#&gt; 3                0                  0</span></span>
-<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a><span class="co">#&gt; 4                0                  0</span></span>
-<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a><span class="co">#&gt; 5                0                  1</span></span>
-<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a><span class="co">#&gt; 6                0                  1</span></span>
-<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="co">#&gt; ... and 1194 more rows</span></span></code></pre></div>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; Encoding: standard</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt; Structure: 100 respondents × 6 questions × 2 alternatives</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="co">#&gt; Profile usage: 45/45 (100.0%)</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; 💡 Use cbc_inspect() for a more detailed summary</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt; First few rows of design:</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price       type freshness</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0       Fuji Excellent</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0 Honeycrisp      Poor</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5 Honeycrisp      Poor</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0       Fuji      Poor</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5 Honeycrisp Excellent</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0 Honeycrisp Excellent</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="co">#&gt; ... and 1194 more rows</span></span></code></pre></div>
 <div id="choice-simulation-approaches" class="section level1">
 <h1>Choice Simulation Approaches</h1>
 <p><code>cbc_choices()</code> supports two simulation approaches:</p>
@@ -407,40 +401,34 @@ probabilities:</p>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">head</span>(choices_random)</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; CBC Choice Data</span></span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; ===============</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; Simulation method: random</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; Priors: None (random choices)</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-09-23 12:45:05</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 33.3% (1 choices)</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 66.7% (2 choices)</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent choice</span></span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; 1                0                  1      0</span></span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; 2                0                  0      1</span></span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; 3                0                  0      0</span></span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; 4                0                  0      1</span></span>
-<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt; 5                0                  1      1</span></span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt; 6                0                  1      0</span></span>
-<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co"># Check choice distribution</span></span>
-<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="fu">table</span>(choices_random<span class="sc">$</span>choice, choices_random<span class="sc">$</span>altID)</span>
-<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt;    </span></span>
-<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt;       1   2</span></span>
-<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt;   0 294 306</span></span>
-<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt;   1 306 294</span></span></code></pre></div>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; Encoding: standard</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; Simulation method: random</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; Priors: None (random choices)</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-10-20 15:22:14</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 33.3% (1 choices)</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 66.7% (2 choices)</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price       type freshness choice</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0       Fuji Excellent      0</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0 Honeycrisp      Poor      1</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5 Honeycrisp      Poor      0</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0       Fuji      Poor      1</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5 Honeycrisp Excellent      1</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0 Honeycrisp Excellent      0</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co"># Check choice distribution</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="fu">table</span>(choices_random<span class="sc">$</span>choice, choices_random<span class="sc">$</span>altID)</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt;    </span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt;       1   2</span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt;   0 294 306</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt;   1 306 294</span></span></code></pre></div>
 <p>Random simulation is useful for:</p>
 <ul>
 <li>Quick testing of design structure</li>
@@ -465,33 +453,27 @@ probabilities:</p>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">head</span>(choices_utility)</span>
 <span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; CBC Choice Data</span></span>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; ===============</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; Simulation method: utility_based</span></span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; Priors: Used for utility-based simulation</span></span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-09-23 12:45:05</span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 66.7% (2 choices)</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 33.3% (1 choices)</span></span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
-<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
-<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
-<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
-<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
-<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent choice</span></span>
-<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; 1                0                  1      1</span></span>
-<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; 2                0                  0      0</span></span>
-<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; 3                0                  0      0</span></span>
-<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; 4                0                  0      1</span></span>
-<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; 5                0                  1      1</span></span>
-<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; 6                0                  1      0</span></span></code></pre></div>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; Encoding: standard</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; Simulation method: utility_based</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; Priors: Used for utility-based simulation</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-10-20 15:22:15</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 66.7% (2 choices)</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 33.3% (1 choices)</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price       type freshness choice</span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0       Fuji Excellent      1</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0 Honeycrisp      Poor      0</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5 Honeycrisp      Poor      0</span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0       Fuji      Poor      1</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5 Honeycrisp Excellent      1</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0 Honeycrisp Excellent      0</span></span></code></pre></div>
 </div>
 <div id="choice-data-format" class="section level2">
 <h2>Choice Data Format</h2>
@@ -500,33 +482,27 @@ probabilities:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">head</span>(choices_utility)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; CBC Choice Data</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; ===============</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Simulation method: utility_based</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Priors: Used for utility-based simulation</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-09-23 12:45:05</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 66.7% (2 choices)</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 33.3% (1 choices)</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price typeGala typeHoneycrisp</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0        0              0</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0        0              1</span></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5        0              1</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0        0              0</span></span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5        0              1</span></span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0        0              1</span></span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt;   freshnessAverage freshnessExcellent choice</span></span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt; 1                0                  1      1</span></span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt; 2                0                  0      0</span></span>
-<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt; 3                0                  0      0</span></span>
-<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt; 4                0                  0      1</span></span>
-<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="co">#&gt; 5                0                  1      1</span></span>
-<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="co">#&gt; 6                0                  1      0</span></span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; Encoding: standard</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; Observations: 3 choice tasks</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Alternatives per task: 2</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; Total choices made: 3</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Simulation method: utility_based</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Priors: Used for utility-based simulation</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Simulated at: 2025-10-20 15:22:15</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Choice rates by alternative:</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   Alt 1: 66.7% (2 choices)</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;   Alt 2: 33.3% (1 choices)</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; First few rows:</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;   profileID respID qID altID obsID price       type freshness choice</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 1        31      1   1     1     1   1.0       Fuji Excellent      1</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; 2        15      1   1     2     1   3.0 Honeycrisp      Poor      0</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; 3        14      1   2     1     2   2.5 Honeycrisp      Poor      0</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; 4         3      1   2     2     2   2.0       Fuji      Poor      1</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; 5        42      1   3     1     3   1.5 Honeycrisp Excellent      1</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt; 6        43      1   3     2     3   2.0 Honeycrisp Excellent      0</span></span></code></pre></div>
 </div>
 </div>
 <div id="advanced-simulation-options" class="section level1">
@@ -624,11 +600,11 @@ coefficient)</li>
 coefficients: 0.2 &gt; 0.1 &gt; 0)</li>
 </ul>
 <p>Examine aggregate choice patterns to validate simulation:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Decode the choice data first to get categorical variables</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>choices_decoded <span class="ot">&lt;-</span> <span class="fu">cbc_decode</span>(choices_utility)</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Convert to standard encoding to get categorical variables</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>choices_standard <span class="ot">&lt;-</span> <span class="fu">cbc_encode</span>(choices_utility, <span class="at">coding =</span> <span class="st">&quot;standard&quot;</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># Aggregate attribute choices across all respondents</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>choices <span class="ot">&lt;-</span> choices_decoded</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>choices <span class="ot">&lt;-</span> choices_standard</span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># Price choices</span></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>price_choices <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(choice <span class="sc">~</span> price, <span class="at">data =</span> choices, sum)</span>
@@ -665,37 +641,39 @@ coefficients: 0.2 &gt; 0.1 &gt; 0)</li>
 <p>For random parameter models, examine variation across
 respondents:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Create dataset with only chosen alternatives</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>chosen_alts <span class="ot">&lt;-</span> choices_mixed[choices_mixed<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>, ]</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># Mean attribute levels chosen by each respondent</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>resp_means <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">cbind</span>(</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    price,</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    typeGala,</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    typeHoneycrisp,</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    freshnessAverage,</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    freshnessExcellent</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  ) <span class="sc">~</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    respID,</span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="at">data =</span> chosen_alts,</span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  mean</span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>)</span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co"># Look at variation across respondents</span></span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Price variation across respondents:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; Price variation across respondents:</span></span>
-<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(resp_means<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; Mean: 2.01</span></span>
-<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;SD:&quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(resp_means<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; SD: 0.28</span></span>
-<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Honeycrisp choice rate variation:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&gt; Honeycrisp choice rate variation:</span></span>
-<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(resp_means<span class="sc">$</span>typeHoneycrisp), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&gt; Mean: 0.32</span></span>
-<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;SD:&quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(resp_means<span class="sc">$</span>typeHoneycrisp), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a><span class="co">#&gt; SD: 0.2</span></span></code></pre></div>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co"># Convert to dummy coding to more easily select individual levels</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>chosen_alts <span class="ot">&lt;-</span> choices_mixed[choices_mixed<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>, ] <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">cbc_encode</span>(<span class="st">&#39;dummy&#39;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co"># Mean attribute levels chosen by each respondent</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>resp_means <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">cbind</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    price,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    typeGala,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    typeHoneycrisp,</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    freshnessAverage,</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    freshnessExcellent</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  ) <span class="sc">~</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    respID,</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  <span class="at">data =</span> chosen_alts,</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  mean</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>)</span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co"># Look at variation across respondents</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Price variation across respondents:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; Price variation across respondents:</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(resp_means<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; Mean: 2.01</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;SD:&quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(resp_means<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="co">#&gt; SD: 0.28</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Honeycrisp choice rate variation:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&gt; Honeycrisp choice rate variation:</span></span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(resp_means<span class="sc">$</span>typeHoneycrisp), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a><span class="co">#&gt; Mean: 0.32</span></span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;SD:&quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(resp_means<span class="sc">$</span>typeHoneycrisp), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a><span class="co">#&gt; SD: 0.2</span></span></code></pre></div>
 </div>
 </div>
 <div id="design-consistency" class="section level1">

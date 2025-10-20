@@ -67,10 +67,15 @@ power_auto <- cbc_power(
 
 # Shows all parameters: price, typeGala, typeHoneycrisp, freshnessAverage, freshnessExcellent
 
+power_auto
+
 ## -----------------------------------------------------------------------------
+# First create dummy-coded version of the choices data
+choices_dummy <- cbc_encode(choices, 'dummy')
+
 # Focus on specific dummy-coded parameters
 power_specific <- cbc_power(
-  data = choices,
+  data = choices_dummy,
   pars = c(
     # Specific dummy variables
     "price",
@@ -83,22 +88,7 @@ power_specific <- cbc_power(
   n_breaks = 8
 )
 
-## -----------------------------------------------------------------------------
-# Decode choice data to get back categorical variables
-choices_decoded <- cbc_decode(choices)
-
-# Now you can use attribute names instead of dummy variables
-power_decoded <- cbc_power(
-  data = choices_decoded,
-  pars = c("price", "type", "freshness"), # Original attribute names
-  outcome = "choice",
-  obsID = "obsID",
-  n_q = 6,
-  n_breaks = 8
-)
-
-# Note: This approach estimates effects differently -
-# it treats categorical variables as factors rather than separate dummy variables
+power_specific
 
 ## ----fig.alt = "Power analysis chart showing statistical power vs sample size for 5 parameters. A red dashed line marks 90% power threshold. Most parameters achieve adequate power by 100 respondents, though freshnessAverage and typeGala require larger sample sizes than price and other freshness/type parameters."----
 
@@ -148,7 +138,7 @@ choices_mixed <- cbc_choices(
 
 # Power analysis for mixed logit model
 power_mixed <- cbc_power(
-  data = cbc_decode(choices_mixed),
+  data = choices_mixed,
   pars = c("price", "type", "freshness"),
   randPars = c(price = "n", type = "n"), # Specify random parameters
   outcome = "choice",

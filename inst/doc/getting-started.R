@@ -52,7 +52,7 @@ choices <- cbc_choices(design, priors = priors)
 choices
 
 ## -----------------------------------------------------------------------------
-choices_cat <- cbc_decode(choices)
+choices_cat <- choices
 
 # Filter for the chosen rows only
 choices_cat <- choices_cat[which(choices_cat$choice == 1), ]

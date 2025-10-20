@@ -1,6 +1,6 @@
 Package: cbcTools
 Title: Design and Analyze Choice-Based Conjoint Experiments
-Version: 0.6.4
+Version: 0.7.1
 Maintainer: John Helveston <john.helveston@gmail.com>
 Authors@R: c(
     person(given   = "John",
@@ -21,8 +21,8 @@ URL: https://github.com/jhelvy/cbcTools,
         https://jhelvy.github.io/cbcTools/
 BugReports: https://github.com/jhelvy/cbcTools/issues
 NeedsCompilation: no
-Packaged: 2025-09-23 16:45:23 UTC; jhelvy
+Packaged: 2025-10-20 19:22:34 UTC; jhelvy
 Author: John Helveston [cre, aut, cph] (ORCID:
     <https://orcid.org/0000-0002-2657-9191>)
 Repository: CRAN
-Date/Publication: 2025-09-23 17:00:02 UTC
+Date/Publication: 2025-10-20 19:50:02 UTC

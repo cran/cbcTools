@@ -1,5 +1,16 @@
 # cbcTools (development version)
 
+# cbcTools 0.7.1
+
+- Auto-encoding to dummy coding occurs for `cbc_choices` and `cbc_power` if the design is detected to have a no_choice option.
+- Updated some of the print methods so that they don't error if the choices or design objects are modified by dplyr functions.
+
+# cbcTools 0.7.0
+
+- Re-configures the design encoding to use "standard" coding by default.
+- Reasoning for standard coding by default is for easier interpretation of summary metrics like balance and overlap.
+- New function `cbc_encode()` used to convert designs to dummy or effects coding.
+
 # cbcTools 0.6.4
 
 - Adds `balance_by` argument to force balanced sampling in designs with restricted or otherwise unbalanced levels across attributes.

@@ -36,8 +36,9 @@ design <- cbc_design(
 design
 
 ## -----------------------------------------------------------------------------
-design_decoded <- cbc_decode(design)
-design_decoded
+design_dummy <- cbc_encode(design, coding = 'dummy')
+
+design_dummy
 
 ## -----------------------------------------------------------------------------
 design_random <- cbc_design(
@@ -141,6 +142,10 @@ design_nochoice <- cbc_design(
 head(design_nochoice)
 
 ## -----------------------------------------------------------------------------
+design_nochoice |> 
+  cbc_encode(coding = 'dummy')
+
+## -----------------------------------------------------------------------------
 design_labeled <- cbc_design(
   profiles = profiles,
   n_alts = 3, # Will be overridden to match number of type levels
@@ -177,10 +182,9 @@ design_unbalanced <- cbc_design(
   n_q = 8,
   n_resp = 100,
   method = "random"
-) |>
-    cbc_decode() # Converts dummy-coded powertrain attributes back to "powertrain"
+)
 
-# Check powertrain distribution - again, electric is over-represented
+# Check powertrain distribution - electric is over-represented
 table(design_unbalanced$powertrain)
 
 ## -----------------------------------------------------------------------------
@@ -192,8 +196,7 @@ design_balanced <- cbc_design(
   n_resp = 100,
   method = "random",
   balance_by = "powertrain" # Balance across powertrain levels
-) |> 
-    cbc_decode()
+)
 
 # Check improved powertrain distribution - now powertrain is balanced
 table(design_balanced$powertrain)
@@ -207,8 +210,7 @@ design_multi_balance <- cbc_design(
   n_resp = 50,
   method = "random",
   balance_by = c("powertrain", "price")
-) |> 
-    cbc_decode()
+)
 
 # Check improved powertrain distribution - now powertrain and price are balanced
 table(design_multi_balance$powertrain)

@@ -126,11 +126,11 @@ choices_interactions <- cbc_choices(
 )
 
 ## -----------------------------------------------------------------------------
-# Decode the choice data first to get categorical variables
-choices_decoded <- cbc_decode(choices_utility)
+# Convert to standard encoding to get categorical variables
+choices_standard <- cbc_encode(choices_utility, coding = "standard")
 
 # Aggregate attribute choices across all respondents
-choices <- choices_decoded
+choices <- choices_standard
 
 # Price choices
 price_choices <- aggregate(choice ~ price, data = choices, sum)
@@ -150,7 +150,9 @@ print(freshness_choices)
 
 ## -----------------------------------------------------------------------------
 # Create dataset with only chosen alternatives
-chosen_alts <- choices_mixed[choices_mixed$choice == 1, ]
+# Convert to dummy coding to more easily select individual levels
+chosen_alts <- choices_mixed[choices_mixed$choice == 1, ] |> 
+  cbc_encode('dummy')
 
 # Mean attribute levels chosen by each respondent
 resp_means <- aggregate(
